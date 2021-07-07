@@ -34,22 +34,33 @@ const DashBoard = () => {
 
     const handleToggle = useCallback(() => setActive((active) => !active), []);
 
+    let url = document.location.href;
+    let params = (new URL(url)).searchParams;
+    let originCookie = params.get('shop')
+    console.log(originCookie);
+    // const keyArr = appConfig.shopify.cookie.split('.')
+    // let finalVal ="";
+    // keyArr.forEach((i) => {
+    //     finalVal = finalVal ? finalVal[i]: window[i]
+    // })
+    //console.log(originCookie);
+
     useEffect(async () => {
         if(isStatusRecevied) {
             let result;
         if(active) {
             result = await axios(
-                `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=activate`
+                `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=activate&shop=${originCookie}`
               );
         } else {
-            result = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=deactivate`);     
+            result = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=deactivate&shop=${originCookie}`);     
         }
         }
       }, [active]);
 
       useEffect(async() => {
-        const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?status=info`);
-        //console.log(res);
+        const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?status=info&shop=${originCookie}`);
+        console.log(res);
         setActive(res.data == 'active');
         setTimeout(() => {
             setIsStatusReceived(true);
@@ -144,14 +155,14 @@ const DashBoard = () => {
                         </Layout.Section>
                     </Layout.AnnotatedSection>
                     <Layout.AnnotatedSection>
-
+                            
                     </Layout.AnnotatedSection>
                 </Layout><br/><br/>
                 <FooterHelp>
                     Need some help? Go to the {' '}
-                    <Link external url="https://retrieveai.com">
+                    <Link external url={appConfig.shopify.contactUrl}>
                     Contact Us
-                    </Link> | <Link external url="https://retrieveai.com">
+                    </Link> | <Link external url={appConfig.shopify.privacyUrl}>
                     Privacy Policy
                     </Link>
                 </FooterHelp>
