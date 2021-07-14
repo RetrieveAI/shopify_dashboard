@@ -2,9 +2,10 @@ import { makeStyles } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import { Badge, Button, Card, Collapsible, FooterHelp, Heading, Layout, Link, Page, SettingToggle, Stack, TextContainer, TextStyle } from '@shopify/polaris'
 import '@shopify/polaris/dist/styles.css';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import useConfig from '../hooks/useConfig';
+import { AppContext } from '../AppContext';
 
 const useStyles = makeStyles((theme) => ({
     intro: {
@@ -22,6 +23,9 @@ const DashBoard = () => {
 
     const appConfig = useConfig();
 
+    const {setSelectedState, selectedState} = useContext(AppContext);
+
+
     const [active, setActive] = useState(true);
     const [open, setOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +41,9 @@ const DashBoard = () => {
     let url = document.location.href;
     let params = (new URL(url)).searchParams;
     let originCookie = params.get('shop')
+    let charge_id = params.get('charge_id')
     console.log(originCookie);
+    console.log(charge_id);
     // const keyArr = appConfig.shopify.cookie.split('.')
     // let finalVal ="";
     // keyArr.forEach((i) => {
@@ -45,18 +51,26 @@ const DashBoard = () => {
     // })
     //console.log(originCookie);
 
-    useEffect(async () => {
-        if(isStatusRecevied) {
-            let result;
-        if(active) {
-            result = await axios(
-                `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=activate&shop=${originCookie}`
-              );
-        } else {
+    useEffect(async() => {
+        if(charge_id !== 'null' ){
+        const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.billing}?charge_id=${charge_id}&shop=${originCookie}`);
+        console.log(res);
+        }
+      }, [])
+
+      useEffect(async() => {
+        const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.billing}?status=info&shop=${originCookie}`);
+        console.log(res);
+        setSelectedState(res.data);
+      }, [])
+      
+      useEffect(async() => {
+          let result;
+        if(selectedState.billing_current_status === 'Expired'){
             result = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=deactivate&shop=${originCookie}`);     
         }
-        }
-      }, [active]);
+      },[selectedState])
+
 
       useEffect(async() => {
         const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?status=info&shop=${originCookie}`);
@@ -67,6 +81,19 @@ const DashBoard = () => {
         }, 100);
       }, [])
 
+         
+    useEffect(async () => {
+        if(isStatusRecevied) {
+            let result;
+        if(active) {
+            result = await axios(
+                `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=activate&shop=${originCookie}`
+              );
+        }else{
+            result = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=deactivate&shop=${originCookie}`);     
+        }
+        }
+      }, [active]);
     //console.log(active);
 
 
@@ -87,7 +114,7 @@ const DashBoard = () => {
             ariaExpanded={open}
             ariaControls="basic-collapsible">
                                 <Heading>
-                                    👋   Welcome to SleekBuys <span className={classes.arrow}><ExpandMore fontSize="large"/></span>
+                                    👋   Welcome to SleekChats <span className={classes.arrow}><ExpandMore fontSize="large"/></span>
                                 </Heading>
                                 </Button>
                                 <Badge>Overview</Badge>
@@ -100,10 +127,8 @@ const DashBoard = () => {
                                 >
                                     <Layout.Section>
                                     <TextContainer>
-                                        <p>
-                                        RetrieveAI enables organizations worldwide to compete more effectively by providing artificial intelligence solutions.
-                                        We develop interactive web applications and tools using different Artificial Intelligence models to explore various types
-                                        of data and create successful business stories that will contribute towards faster and efficient decision-making.
+                                    <p>
+                                        SleekChats app helps you deliver value to the customers by intelligently chatting with them and provide items in real time from your store 24/7. This life like experience will enhance customer experience and elevate sales of your store.
                                         </p>
                                     </TextContainer>
                                     </Layout.Section>
@@ -117,7 +142,7 @@ const DashBoard = () => {
             ariaExpanded={menuOpen}
             ariaControls="menu-collapsible">
                                 <Heading>
-                                🚀   Use the pre-launch chatbot feature to build buzz <span className={classes.arrow}><ExpandMore fontSize="large"/></span>
+                                🚀   We are excited to share few details on how our app works <span className={classes.arrow}><ExpandMore fontSize="large"/></span>
                                 </Heading>
                                 </Button>
                                 <Badge>Overview</Badge>
@@ -130,18 +155,43 @@ const DashBoard = () => {
                                 >
                                     <Layout.Section>
                                     <TextContainer>
-                                        <p>
-                                        RetrieveAI enables organizations worldwide to compete more effectively by providing artificial intelligence solutions.
-                                        We develop interactive web applications and tools using different Artificial Intelligence models to explore various types
-                                        of data and create successful business stories that will contribute towards faster and efficient decision-making.
-                                        </p>
+                                    <ul>
+                                            <li>
+                                            AI Based chat functionality with powerful natural language processing to understand the customers requirement and reply back to them.
+                                            </li>
+                                            <li>
+                                            Automatically detect key words and phrases to make accurate suggestions
+                                            </li>
+                                            <li>
+                                            Drive the sales with human like experience through out the conversation
+                                            </li>
+                                            <li>
+                                            Session management to continuously engage with customers and wait for their responses
+                                            </li>
+                                            <li>
+                                            Welcome and greeting message to kick start the conversation
+                                            </li>
+                                        </ul>
                                     </TextContainer>
                                     </Layout.Section>
                                 </Collapsible>
                         </Card>
                     </Layout.Section>
-                    <Layout.AnnotatedSection title="Install the SleekBuys App"
-                        description="SleekBuys is the easiest way to sell your products in person.">
+                    { selectedState.billing_current_status === 'Expired' ? <Layout.AnnotatedSection title="Your current plan is expired."
+                        description="Please change the plan to reactivate the chat widget">
+                            <Layout.Section>
+                        <SettingToggle
+                        action={{
+                        content: contentStatus,
+                        onClick: handleToggle,
+                        disabled: true
+                        }}
+                        >
+                        Your SleekChats is <TextStyle variation="strong">deactivated</TextStyle>.
+                        </SettingToggle>
+                        </Layout.Section>
+                    </Layout.AnnotatedSection> : <Layout.AnnotatedSection
+                        description="SleekChats is the easiest way to sell your products in person.">
                         <Layout.Section>
                         <SettingToggle
                         action={{
@@ -150,10 +200,11 @@ const DashBoard = () => {
                         }}
                         enabled={active}
                         >
-                        Your SleekBuys Chat is <TextStyle variation="strong">{textStatus}</TextStyle>.
+                        Your SleekChats is <TextStyle variation="strong">{textStatus}</TextStyle>.
                         </SettingToggle>
                         </Layout.Section>
                     </Layout.AnnotatedSection>
+                        }
                     <Layout.AnnotatedSection>
                             
                     </Layout.AnnotatedSection>
