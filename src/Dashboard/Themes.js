@@ -68,7 +68,7 @@ const Themes = () => {
       <Layout>
         <Layout.AnnotatedSection
           title="Change your Widget Theme"
-          description="SleekBuys providing you the Light and Dark Theme"
+          description="SleekChats providing you the Light and Dark Theme"
         >
           <Layout.Section>
             <SettingToggle
@@ -78,7 +78,7 @@ const Themes = () => {
               }}
               enabled={activeTheme}
             >
-              Your SleekBuys Chat Theme is{" "}
+              Your SleekChats Theme is{" "}
               <TextStyle variation="strong">{textStatus}</TextStyle>.
             </SettingToggle>
           </Layout.Section>
