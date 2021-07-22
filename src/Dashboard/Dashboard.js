@@ -66,7 +66,7 @@ const DashBoard = () => {
       
       useEffect(async() => {
           let result;
-        if(selectedState.billing_current_status === 'Expired'){
+        if(selectedState.billing_current_plan_status === 'Expired'){
             result = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?state=deactivate&shop=${originCookie}`);     
         }
       },[selectedState])
@@ -177,7 +177,7 @@ const DashBoard = () => {
                                 </Collapsible>
                         </Card>
                     </Layout.Section>
-                    { selectedState.billing_current_status === 'Expired' ? <Layout.AnnotatedSection title="Your current plan is expired."
+                    { selectedState.billing_current_plan_status === 'Expired' ? <Layout.AnnotatedSection title="Your current plan is expired."
                         description="Please change the plan to reactivate the chat widget">
                             <Layout.Section>
                         <SettingToggle
