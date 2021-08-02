@@ -29,6 +29,7 @@ const Themes = () => {
   // })
   // console.log(finalVal);
 
+//set the widget theme based on the status received  
   useEffect(async () => {
     if (!isThemeStatusRecevied) {
       setIsThemeStatusReceived(true);
@@ -46,6 +47,8 @@ const Themes = () => {
     }
   }, [activeTheme]);
 
+
+//widget theme status check  
   useEffect(async () => {
     const res = await axios(
       `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.themes}?status=check&shop=${originCookie}`

@@ -3,7 +3,7 @@ import { Layout, Page, Stack } from '@shopify/polaris'
 import React, { useEffect, useState } from 'react'
 import {Bar} from 'react-chartjs-2';
 
-
+//component not in use
 const Conversations = ({data}) => {
 
     const [msgProcessedViewData, setMsgProcessedViewData] = useState([])

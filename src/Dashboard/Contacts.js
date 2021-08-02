@@ -45,6 +45,7 @@ const Contacts = () => {
         fetchContactsData()
     },[])
 
+//Fetch contacts api data
     const fetchContactsData = async () => {
         let api_url = `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.cust}?shop=${originCookie}`
         const result = await axios.get(
@@ -58,7 +59,8 @@ const Contacts = () => {
       }; 
 
       if(!contactsData.length) return <h2>No Data</h2>;
-      
+
+//used shopify polaris components
     return (
         <Page title="Contacts">
             <Stack>

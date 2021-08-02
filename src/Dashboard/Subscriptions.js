@@ -36,6 +36,7 @@ const Subscriptions = () => {
         return setSelected(value)
     },  []);
 
+//condition for selected plan expiry and plan limit    
     useEffect(() => {
         console.log(planLimits[selected[0]], countStatus.current_month_visitors_count );
         if(selected[0] === countStatus.selected_plan && countStatus.billing_current_plan_status === "Expired" || countStatus.current_month_visitors_count > planLimits[selected[0]]){
@@ -58,6 +59,7 @@ const Subscriptions = () => {
     const PremiumPlan = {label: 'Premium', value: 'Premium',  helpText:
     '$149.99 per month | Up to 200,000 Monthly Site Visitors | Unlimited Sales,Support and Order Tracking Chats | Unlimited AI Chat Interactions',};
 
+//get the billing plan based on the click   
     const handleClick = () => {
         let result;
         console.log(selected);
@@ -107,7 +109,8 @@ const Subscriptions = () => {
     }
 
     //console.log(countStatus.text);
-
+    
+//get the billing status
     useEffect(async() => {
         const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.billing}?status=info&shop=${originCookie}`);
         console.log(res);

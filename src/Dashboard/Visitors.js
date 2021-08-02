@@ -99,6 +99,7 @@ const Visitors = ({ data }) => {
     fetchChartData() 
   },[])
 
+//fetch the analytics data  
 const fetchChartData = async () => {
     let api_url = `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.analytics}?shop=${originCookie}&year=${currentYear}&month=${currentMonth}&week=${currentWeek}`
     const result = await axios.get(
@@ -119,7 +120,7 @@ const fetchChartData = async () => {
       fetchChartData()
       setMonthData(visitorsData.vistors_monthwise);
     }
-    //console.log(selectYear);
+    console.log(selectYear);
   };
 
   const weekChange = (event) => {

@@ -124,6 +124,7 @@ const Inbox = () => {
         return selectedUser == (pageNumber-1)*pageSize+index
     }
 
+//fetch the data of conversations
     const fetchConvo = async (userIndex) => {
         setSelectedUser(userIndex)
         const result = await axios.get(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.convo}?shop=${originCookie}&session_id=${convoList[userIndex].session_id}`, {withCredentials: true});
@@ -143,6 +144,7 @@ const Inbox = () => {
         }
     }
 
+//fecth the data of customers
     const fetchCustomerData = async () => {
         let api_url = `${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.convo}?shop=${originCookie}`
         const result = await axios.get(
@@ -155,6 +157,7 @@ const Inbox = () => {
           }
       }; 
 
+//function not used      
     const getProductItem = (productId) => {
         const product = productItems.filter(item => item.product_id == productId);
         if(product.length) {
@@ -166,7 +169,7 @@ const Inbox = () => {
 
     if (!currentUsers) return <h4>No Users</h4>;
 
-
+//used miui treasury chat component for chatui
     return (
         <Page 
         title="Inbox"

@@ -51,6 +51,7 @@ const DashBoard = () => {
     // })
     //console.log(originCookie);
 
+//get the payment status done charge_id
     useEffect(async() => {
         if(charge_id !== 'null' ){
         const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.billing}?charge_id=${charge_id}&shop=${originCookie}`);
@@ -58,12 +59,14 @@ const DashBoard = () => {
         }
       }, [])
 
+//get the billing status info
       useEffect(async() => {
         const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.billing}?status=info&shop=${originCookie}`);
         console.log(res);
         setSelectedState(res.data);
       }, [])
-      
+
+//get the status of plan and activate or deactivate widget      
       useEffect(async() => {
           let result;
         if(selectedState.billing_current_plan_status === 'Expired'){
@@ -71,7 +74,7 @@ const DashBoard = () => {
         }
       },[selectedState])
 
-
+//get the status of sleekchats widget
       useEffect(async() => {
         const res = await axios(`${appConfig.shopify.endpoint}${appConfig.shopify.envpath}${appConfig.shopify.resource}?status=info&shop=${originCookie}`);
         console.log(res);
@@ -81,7 +84,8 @@ const DashBoard = () => {
         }, 100);
       }, [])
 
-         
+      
+//api check if status active or deactive         
     useEffect(async () => {
         if(isStatusRecevied) {
             let result;
